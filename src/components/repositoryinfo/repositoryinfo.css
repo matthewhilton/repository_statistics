@@ -1,0 +1,13 @@
+#repositoryinfo * {
+  color: black;
+}
+
+#repositoryinfo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#repositoryinfo div {
+  flex-grow: 1;
+}
