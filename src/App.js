@@ -3,24 +3,10 @@ import Navbar from './components/navbar/navbar.js'
 import SearchWidget from './components/searchwidget/searchwidget.js'
 import RepositoryImage from './components/repositoryimage/repositoryimage.js'
 import RepositoryInfo from './components/repositoryinfo/repositoryinfo.js'
-import { Bar } from 'react-chartjs-2';
+
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip  } from 'recharts';
 
 import './App.css';
-
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [65, 59, 80, 81, 56, 55, 40]
-    }
-  ]
-};
 
 class App extends Component {
   constructor(props) {
@@ -30,12 +16,16 @@ class App extends Component {
       repositoryName: "null_repository",
       favouriteDay: "null_day",
       favouriteTime: "null_time",
+      data: [{name: 'Monday', commits: 200},{name: 'Tuesday', commits: 500}]
     };
   }
-
+   test() {
+     console.log("test function please ignore")
+   }
   render() {
     return (
       <div className="App">
+      <button onClick={this.test}>Test </button>
         <Navbar title="Github Repository Statistics" linkto="#" />
         <div id="appContainer">
           <div id="topbar">
@@ -53,14 +43,14 @@ class App extends Component {
               most_time={this.state.favouriteTime}
             />
 
-            <Bar
-              data={data}
-              width={200}
-              height={60}
-              options={{
-                responsive: true,
-              }}
-            />
+            <LineChart width={600} height={300} data={this.state.data}>
+              <Line type="monotone" dataKey="commits" stroke="#8884d8" />
+              <CartesianGrid stroke="#ccc" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+            </LineChart>
+
           </div>
         </div>
       </div>
