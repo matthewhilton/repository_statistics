@@ -3,8 +3,7 @@ import Navbar from './components/navbar/navbar.js'
 import SearchWidget from './components/searchwidget/searchwidget.js'
 import RepositoryImage from './components/repositoryimage/repositoryimage.js'
 import RepositoryInfo from './components/repositoryinfo/repositoryinfo.js'
-
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip  } from 'recharts';
+import RepositoryGraph from './components/repositorygraph/repositorygraph.js'
 
 import './App.css';
 
@@ -16,7 +15,10 @@ class App extends Component {
       repositoryName: "null_repository",
       favouriteDay: "null_day",
       favouriteTime: "null_time",
-      data: [{name: 'Monday', commits: 200},{name: 'Tuesday', commits: 500}]
+      datalabels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri'],
+      dataseries: [
+        [12,15,30,5,0]
+      ],
     };
   }
    test() {
@@ -43,13 +45,7 @@ class App extends Component {
               most_time={this.state.favouriteTime}
             />
 
-            <LineChart width={600} height={300} data={this.state.data}>
-              <Line type="monotone" dataKey="commits" stroke="#8884d8" />
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-            </LineChart>
+            <RepositoryGraph datalabels={this.state.datalabels} dataseries={this.state.dataseries} />
 
           </div>
         </div>
