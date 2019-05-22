@@ -6,8 +6,8 @@ import './repositorygraph.css'
 class RepositoryGraph extends Component {
   render() {
     var options = {
-      high: 300,
       low: 0,
+      showArea: true,
       axisY: {
         labelInterpolationFnc: function(value, index) {
           return index % 2 === 0 ? value : null;

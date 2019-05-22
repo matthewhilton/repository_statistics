@@ -15,20 +15,24 @@ class App extends Component {
       repositoryName: "null_repository",
       favouriteDay: "null_day",
       favouriteTime: "null_time",
-      datalabels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri'],
+      datalabels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
       dataseries: [
-        [12,15,30,5,0]
+        [12,15,7,5,10,20,30]
       ],
     };
+
+    this.changeData = this.changeData.bind(this)
   }
-   test() {
+   changeData() {
      console.log("test function please ignore")
+     this.setState({dataseries: [[5,20,50,100,10]]})
    }
+
   render() {
     return (
       <div className="App">
-      <button onClick={this.test}>Test </button>
-        <Navbar title="Github Repository Statistics" linkto="#" />
+      <button onClick={this.changeData}>Test </button>
+        <Navbar title="Github Repository Statistics" linkto="https://github.com/unxpctederr/repository_statistics" />
         <div id="appContainer">
           <div id="topbar">
             <SearchWidget />
