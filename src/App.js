@@ -4,6 +4,7 @@ import SearchWidget from './components/searchwidget/searchwidget.js'
 import RepositoryInfo from './components/repositoryinfo/repositoryinfo.js'
 import RepositoryGraph from './components/repositorygraph/repositorygraph.js'
 import Error from './components/error/error.js'
+import TryButton from './components/trybutton/trybutton.js'
 
 import './App.css';
 
@@ -15,7 +16,6 @@ class App extends Component {
       repositoryName: "null_repository",
       repositoryImageURL: "https://github.com/identicons/github.png",
       favouriteDay: "null_day",
-      favouriteTime: "null_time",
       datalabels: ['Sun','Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
       dataseries: [
         [12,15,7,5,10,20,30]
@@ -23,18 +23,11 @@ class App extends Component {
       error: '',
     };
 
-    this.changeData = this.changeData.bind(this)
     this.fetchStatistics = this.fetchStatistics.bind(this)
   }
-   changeData() {
-     console.log("test function please ignore")
-     this.setState({dataseries: [[5,20,50,100,10]]})
-   };
 
    // Calls github API using search entered in box, passed up from child Searchwidget component
    fetchStatistics(query) {
-     console.log("searching for query: " + query)
-
      // Fetch Repository image, url and owner
      fetch("https://api.github.com/repos/" + query)
       .then(res => res.json())
@@ -66,8 +59,6 @@ class App extends Component {
                      var dailyData = weeklyData[x]
                      averageEachDay[x] += dailyData
                    }
-
-                   /// TODO: work out favourite day to commit
                  }
 
                  // Divide to get average
@@ -75,8 +66,21 @@ class App extends Component {
                    averageEachDay[x] = Math.round(averageEachDay[x] / result.length)
                  }
 
-                 //Update state with data
+                 // Calculate favourite day to commit
+                 var favouriteDay = 0
+                 for(var y = 0; y < 7; y++){
+                   if(averageEachDay[y] > averageEachDay[favouriteDay]){
+                     favouriteDay = y
+                   }
+                 }
 
+                 var favouriteDayName = this.state.datalabels[favouriteDay]
+
+                 //Update state with data
+                 this.setState({
+                   dataseries: [averageEachDay],
+                   favouriteDay: favouriteDayName
+                 })
 
                },
                (error) => {
@@ -103,12 +107,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <button onClick={this.changeData}>Test </button>
         <Navbar title="Github Repository Statistics" linkto="https://github.com/unxpctederr/repository_statistics" />
         <div id="appContainer">
           <div id="topbar">
             <SearchWidget callback={this.fetchStatistics}/>
             <Error message={this.state.error}/>
+            <b> Try: </b>
+            <TryButton tryit="nodejs/node" callback={this.fetchStatistics}/>
+            <TryButton tryit="atom/atom" callback={this.fetchStatistics}/>
+            <TryButton tryit="apple/swift" callback={this.fetchStatistics}/>
           </div>
 
           <div id="mainpage">
@@ -121,6 +128,7 @@ class App extends Component {
             />
 
             <RepositoryGraph datalabels={this.state.datalabels} dataseries={this.state.dataseries} />
+
 
           </div>
         </div>
