@@ -22,10 +22,16 @@ class App extends Component {
     };
 
     this.changeData = this.changeData.bind(this)
+    this.callGithubApi = this.callGithubApi.bind(this)
   }
    changeData() {
      console.log("test function please ignore")
      this.setState({dataseries: [[5,20,50,100,10]]})
+   }
+
+   // Calls github API using search entered in box, passed up from child Searchwidget component
+   callGithubApi(query) {
+     console.log("searching for query: " + query)   
    }
 
   render() {
@@ -35,7 +41,7 @@ class App extends Component {
         <Navbar title="Github Repository Statistics" linkto="https://github.com/unxpctederr/repository_statistics" />
         <div id="appContainer">
           <div id="topbar">
-            <SearchWidget />
+            <SearchWidget callback={this.callGithubApi}/>
             <p> <b> Owner:</b> <br  /> {this.state.repositoryOwner} </p>
             <div className="graphContainer">
               <RepositoryImage imageURL="https://via.placeholder.com/150/0000FF/FFFFFF/?text=Digital.com"/>

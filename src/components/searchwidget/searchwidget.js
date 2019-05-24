@@ -4,7 +4,9 @@ import './searchwidget.css';
 class SearchWidget extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      value: '',
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,7 +19,8 @@ class SearchWidget extends React.Component {
 
   // Reads state as updated before
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
+    this.props.callback(this.state.value)
+    this.setState({value: ''})
     event.preventDefault();
   }
 
@@ -31,6 +34,8 @@ class SearchWidget extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
+
+        <h2> {this.state.ownerName} </h2>
       </div>
     );
   }
