@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './components/navbar/navbar.js'
 import SearchWidget from './components/searchwidget/searchwidget.js'
-import RepositoryImage from './components/repositoryimage/repositoryimage.js'
 import RepositoryInfo from './components/repositoryinfo/repositoryinfo.js'
 import RepositoryGraph from './components/repositorygraph/repositorygraph.js'
 import Error from './components/error/error.js'
@@ -14,9 +13,10 @@ class App extends Component {
     this.state = {
       repositoryOwner: "null_owner",
       repositoryName: "null_repository",
+      repositoryImageURL: "https://github.com/identicons/github.png",
       favouriteDay: "null_day",
       favouriteTime: "null_time",
-      datalabels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+      datalabels: ['Sun','Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
       dataseries: [
         [12,15,7,5,10,20,30]
       ],
@@ -29,20 +29,62 @@ class App extends Component {
    changeData() {
      console.log("test function please ignore")
      this.setState({dataseries: [[5,20,50,100,10]]})
-   }
+   };
 
    // Calls github API using search entered in box, passed up from child Searchwidget component
    fetchStatistics(query) {
      console.log("searching for query: " + query)
 
-     //
+     // Fetch Repository image, url and owner
      fetch("https://api.github.com/repos/" + query)
       .then(res => res.json())
       .then(
         (result) => {
           if(result.message == undefined){
-            console.log(result)
-            this.setState({error: ''})
+            // Update state to add data from response
+            this.setState({
+              error: '',
+              repositoryImageURL: result.owner.avatar_url,
+              repositoryName: result.name,
+              repositoryOwner: result.owner.login,
+            })
+
+            // Now get repository commit activity
+
+            fetch("https://api.github.com/repos/"+this.state.repositoryOwner+"/"+this.state.repositoryName+"/stats/commit_activity")
+             .then(res => res.json())
+             .then(
+               (result) => {
+                 var averageEachDay = [0,0,0,0,0,0,0]
+
+                 // Make running total of values each day
+                 for(var i = 0; i < result.length; i++){
+                   // Get array containing commits per each day in a week (starting sunday)
+                   var weeklyData = result[i]['days']
+                   // Add data into one array
+                   for(var x = 0; x < 7; x++){
+                     var dailyData = weeklyData[x]
+                     averageEachDay[x] += dailyData
+                   }
+
+                   /// TODO: work out favourite day to commit
+                 }
+
+                 // Divide to get average
+                 for(var x = 0; x < averageEachDay.length; x++){
+                   averageEachDay[x] = Math.round(averageEachDay[x] / result.length)
+                 }
+
+                 //Update state with data
+
+
+               },
+               (error) => {
+                 console.log("an error occurred")
+                 console.log(error)
+               }
+             )
+
           } else {
             // Github API responds with message if error occurs (most likely 404 not found)
             console.log(result.message)
@@ -54,7 +96,9 @@ class App extends Component {
           console.log(error)
         }
       )
-   }
+   };
+
+
 
   render() {
     return (
@@ -65,17 +109,15 @@ class App extends Component {
           <div id="topbar">
             <SearchWidget callback={this.fetchStatistics}/>
             <Error message={this.state.error}/>
-            <p> <b> Owner:</b> <br  /> {this.state.repositoryOwner} </p>
-            <div className="graphContainer">
-              <RepositoryImage imageURL="https://via.placeholder.com/150/0000FF/FFFFFF/?text=Digital.com"/>
-            </div>
           </div>
 
           <div id="mainpage">
+
             <RepositoryInfo
+              imageUrl={this.state.repositoryImageURL}
               name={this.state.repositoryName}
+              owner={this.state.repositoryOwner}
               most_day={this.state.favouriteDay}
-              most_time={this.state.favouriteTime}
             />
 
             <RepositoryGraph datalabels={this.state.datalabels} dataseries={this.state.dataseries} />
