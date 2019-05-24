@@ -113,9 +113,13 @@ class App extends Component {
             <SearchWidget callback={this.fetchStatistics}/>
             <Error message={this.state.error}/>
             <b> Try: </b>
-            <TryButton tryit="nodejs/node" callback={this.fetchStatistics}/>
-            <TryButton tryit="atom/atom" callback={this.fetchStatistics}/>
-            <TryButton tryit="apple/swift" callback={this.fetchStatistics}/>
+            <div className="flex">
+              <TryButton tryit="nodejs/node" callback={this.fetchStatistics}/>
+              <TryButton tryit="atom/atom" callback={this.fetchStatistics}/>
+              <TryButton tryit="apple/swift" callback={this.fetchStatistics}/>
+              <TryButton tryit="angular/angular" callback={this.fetchStatistics}/>
+              <TryButton tryit="python/cpython" callback={this.fetchStatistics}/>
+            </div>
           </div>
 
           <div id="mainpage">
