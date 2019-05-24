@@ -27,7 +27,8 @@ class SearchWidget extends React.Component {
   render() {
     return (
       <div>
-        <b className="search"> Repository Name </b>
+        <b className="search"> Search Repositories </b>
+        <p> use format owner/repositoryname</p>
         <form onSubmit={this.handleSubmit}>
           <label>
             <input type="text" value={this.state.value} onChange={this.handleChange} />
