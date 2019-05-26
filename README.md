@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Get statistics about any Github repository
 ###### a side project to learn react
 ---
-**View site here: //todo heroku link**
+**View site here: https://repositorystatistics.herokuapp.com/**
 ---
 ## What is it?
 This web app gives you some simple statistics about any Github repository.
